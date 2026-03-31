@@ -1,0 +1,137 @@
+@page "/"
+@page "/{PanelPath}/dashboard"
+@page "/{PanelPath}"
+@attribute [Authorize]
+@inject PortalDataService PortalDataService
+@inject WhiteLabelContext WhiteLabelContext
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (_isLoading)
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10 d-flex justify-center">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    </MudContainer>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.False" Class="py-8 px-4 px-md-8">
+        <MudBreadcrumbs Items="@_breadcrumbs" Class="mb-6" />
+
+        <MudGrid Spacing="3" Class="mt-1">
+            <MudItem xs="12" sm="6" lg="3">
+                <MudLink Href='@WhiteLabelContext.GetPath("new-enquiry")' Underline="Underline.None" Class="metric-link">
+                    <MudPaper Class="pa-5 metric-card metric-card-primary" Elevation="0">
+                        <MudText Typo="Typo.h5" Class="metric-title">New enquiry</MudText>
+                        <MudText Typo="Typo.h2" Class="metric-value">+</MudText>
+                    </MudPaper>
+                </MudLink>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudLink Href='@WhiteLabelContext.GetPath("cases?tab=all")' Underline="Underline.None" Class="metric-link">
+                    <MudPaper Class="pa-5 metric-card metric-card-mid" Elevation="0">
+                        <MudText Typo="Typo.h5" Class="metric-title">All</MudText>
+                        <MudText Typo="Typo.h2" Class="metric-value">@AllPoliciesCount</MudText>
+                    </MudPaper>
+                </MudLink>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudLink Href='@WhiteLabelContext.GetPath("cases?tab=draft")' Underline="Underline.None" Class="metric-link">
+                    <MudPaper Class="pa-5 metric-card metric-card-bright" Elevation="0">
+                        <MudText Typo="Typo.h5" Class="metric-title">Draft</MudText>
+                        <MudText Typo="Typo.h2" Class="metric-value">@DraftPoliciesCount</MudText>
+                    </MudPaper>
+                </MudLink>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudLink Href='@WhiteLabelContext.GetPath("cases?tab=issued")' Underline="Underline.None" Class="metric-link">
+                    <MudPaper Class="pa-5 metric-card metric-card-soft" Elevation="0">
+                        <MudText Typo="Typo.h5" Class="metric-title">Issued</MudText>
+                        <MudText Typo="Typo.h2" Class="metric-value">@IssuedPoliciesCount</MudText>
+                    </MudPaper>
+                </MudLink>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Spacing="3" Class="mt-1">
+            <MudItem xs="12" lg="6">
+                <MudPaper Class="pa-6 dashboard-card" Elevation="0">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-4">
+                        <MudText Typo="Typo.h5">My recent case activity</MudText>
+                        <MudButton Href='@WhiteLabelContext.GetPath("cases")' Variant="Variant.Text" Color="Color.Primary">View all</MudButton>
+                    </MudStack>
+
+                    <MudTable T="CaseListItem" Items="@MyRecentCases" Dense="true" Hover="true" Elevation="0" OnRowClick="@OnCaseRowClick">
+                        <HeaderContent>
+                            <MudTh>Case ID</MudTh>
+                            <MudTh>Address</MudTh>
+                            <MudTh>Status</MudTh>
+                            <MudTh>Last updated</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Case ID">@context.CaseId</MudTd>
+                            <MudTd DataLabel="Address">@context.Address</MudTd>
+                            <MudTd DataLabel="Status">
+                                <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small" Class="@GetStatusChipClass(context.Status)">@context.Status</MudChip>
+                            </MudTd>
+                            <MudTd DataLabel="Last updated">@context.LastUpdatedDate.ToString("dd MMM yyyy")</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" lg="6">
+                <MudPaper Class="pa-6 dashboard-card" Elevation="0">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-4">
+                        <MudText Typo="Typo.h5">Company case activity</MudText>
+                        <MudButton Href='@WhiteLabelContext.GetPath("cases?scope=company&tab=all")' Variant="Variant.Text" Color="Color.Primary">View all</MudButton>
+                    </MudStack>
+
+                    <MudTable T="CaseListItem" Items="@CompanyRecentCases" Dense="true" Hover="true" Elevation="0" OnRowClick="@OnCaseRowClick">
+                        <HeaderContent>
+                            <MudTh>Case ID</MudTh>
+                            <MudTh>Address</MudTh>
+                            <MudTh>Status</MudTh>
+                            <MudTh>Last updated</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Case ID">@context.CaseId</MudTd>
+                            <MudTd DataLabel="Address">@context.Address</MudTd>
+                            <MudTd DataLabel="Status">
+                                <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small" Class="@GetStatusChipClass(context.Status)">@context.Status</MudChip>
+                            </MudTd>
+                            <MudTd DataLabel="Last updated">@context.LastUpdatedDate.ToString("dd MMM yyyy")</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Spacing="3" Class="mt-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-6 dashboard-card" Elevation="0">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="flex-wrap">
+                        <div>
+                            <MudText Typo="Typo.subtitle2">Signed-in user</MudText>
+                            <MudText Typo="Typo.h6" GutterBottom="true">@_userDetails?.DisplayName</MudText>
+                        </div>
+                        <MudDivider Vertical="true" FlexItem="true" Class="mx-4 d-none d-md-flex" />
+                        <div>
+                            <MudText Typo="Typo.subtitle2">Office</MudText>
+                            <MudText Typo="Typo.body2">@(_userDetails?.OfficeName ?? "Not available")</MudText>
+                        </div>
+                        <MudDivider Vertical="true" FlexItem="true" Class="mx-4 d-none d-md-flex" />
+                        <div>
+                            <MudText Typo="Typo.subtitle2">Introducer ID</MudText>
+                            <MudText Typo="Typo.body2">@(_userDetails?.IntroducerId ?? "Not available")</MudText>
+                        </div>
+                        <MudDivider Vertical="true" FlexItem="true" Class="mx-4 d-none d-md-flex" />
+                        <div>
+                            <MudText Typo="Typo.subtitle2">Panels</MudText>
+                            <MudText Typo="Typo.body2">@PanelsSummary</MudText>
+                        </div>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}

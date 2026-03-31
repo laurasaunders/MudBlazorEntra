@@ -1,0 +1,59 @@
+# Build outputs
+*.dll
+*.exe
+*.pdb
+*.obj
+*.o
+*.a
+*.lib
+*.out
+*.class
+
+# Build directories
+bin/
+obj/
+build/
+dist/
+out/
+
+# Package managers
+node_modules/
+packages/
+*.nupkg
+
+# IDE - Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE - VS Code
+.vscode/
+
+# IDE - JetBrains (Rider, IntelliJ)
+.idea/
+*.iml
+
+# IDE - Xcode
+*.xcworkspace
+*.xcuserdata
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets
+.env
+.env.local
+*.secret
+
+# Temp files
+*.tmp
+*.temp
+*~

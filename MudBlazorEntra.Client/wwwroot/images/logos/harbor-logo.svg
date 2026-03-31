@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Harbor Convey logo">
+  <rect width="120" height="120" rx="28" fill="#123b5d"/>
+  <path d="M24 72c8-10 16-15 24-15 8 0 16 5 24 15 8-10 16-15 24-15 8 0 16 5 24 15v16H24V72Z" fill="#3aaed8"/>
+  <path d="M30 46h60v10H30z" fill="#fff"/>
+  <circle cx="60" cy="42" r="12" fill="#86d8f2"/>
+</svg>

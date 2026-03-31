@@ -1,0 +1,6 @@
+﻿@inject WhiteLabelContext WhiteLabelContext
+
+<MudNavMenu>
+    <MudNavLink Href="@WhiteLabelContext.GetPath()" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <MudNavLink Href='@WhiteLabelContext.GetPath("authentication/logout")' Icon="@Icons.Material.Filled.Logout">Sign out</MudNavLink>
+</MudNavMenu>

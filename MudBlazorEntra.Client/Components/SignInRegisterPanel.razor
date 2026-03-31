@@ -1,0 +1,50 @@
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject WhiteLabelContext WhiteLabelContext
+<MudContainer MaxWidth="MaxWidth.False" Class="auth-shell">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" md="6" lg="4">
+            <MudPaper Class="pa-6 auth-panel" Elevation="6">
+                <MudTabs Rounded="true">
+                    <MudTabPanel Text="Sign in">
+                        <MudText Typo="Typo.h5" GutterBottom="true">Welcome back</MudText>
+                        <MudText Typo="Typo.body2" Class="mb-6">
+                            Continue to Microsoft Entra to authenticate and then choose the panel you want to access.
+                        </MudText>
+                        <MudButton Href="@GetLoginPath()" FullWidth="true" Size="Size.Large" Variant="Variant.Filled" Color="Color.Default" Class="button-primary" StartIcon="@Icons.Material.Filled.Login">
+                            Sign in with Entra
+                        </MudButton>
+                        @if (!string.IsNullOrWhiteSpace(_accessDeniedMessage))
+                        {
+                            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="mt-4">
+                                @_accessDeniedMessage
+                            </MudAlert>
+                        }
+                    </MudTabPanel>
+                    <MudTabPanel Text="Register">
+                        <EditForm Model="@_registerModel" OnValidSubmit="@SubmitRegistrationAsync">
+                            <DataAnnotationsValidator />
+                            <MudStack Spacing="2">
+                                <MudText Typo="Typo.h5">Request access</MudText>
+                                <MudTextField @bind-Value="_registerModel.FirstName" Label="First name" Variant="Variant.Outlined" For="@(() => _registerModel.FirstName)" Required="true" />
+                                <MudTextField @bind-Value="_registerModel.LastName" Label="Last name" Variant="Variant.Outlined" For="@(() => _registerModel.LastName)" Required="true" />
+                                <MudTextField @bind-Value="_registerModel.Email" Label="Work email" Variant="Variant.Outlined" For="@(() => _registerModel.Email)" Required="true" />
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Size="Size.Large" Variant="Variant.Filled" Color="Color.Default" Class="button-secondary" Disabled="@_isSubmitting">
+                                    @(_isSubmitting ? "Submitting..." : "Register")
+                                </MudButton>
+                            </MudStack>
+                        </EditForm>
+
+                        @if (!string.IsNullOrWhiteSpace(_registrationMessage))
+                        {
+                            <MudAlert Severity="Severity.Success" Variant="Variant.Outlined" Class="mt-4">
+                                @_registrationMessage
+                            </MudAlert>
+                        }
+                    </MudTabPanel>
+                </MudTabs>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

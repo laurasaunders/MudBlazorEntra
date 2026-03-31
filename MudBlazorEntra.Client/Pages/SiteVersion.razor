@@ -1,0 +1,48 @@
+@page "/site-version"
+@attribute [Authorize]
+@inject PortalDataService PortalDataService
+
+<PageTitle>Site Version</PageTitle>
+
+@if (_isLoading)
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10 d-flex justify-center">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    </MudContainer>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.False" Class="auth-shell">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12" md="8" lg="7">
+                <MudPaper Class="pa-6 auth-panel" Elevation="6">
+                    <MudText Typo="Typo.h4" GutterBottom="true">Choose a panel</MudText>
+                    <MudText Typo="Typo.body1" Class="mb-4">
+                        Select the panel you want to access for this session.
+                    </MudText>
+
+                    <MudGrid Spacing="3">
+                        @foreach (var panel in AvailablePanels)
+                        {
+                            <MudItem xs="12" sm="6">
+                                <MudPaper Class="pa-5 panel-choice-card" Elevation="0">
+                                    <MudText Typo="Typo.h6" GutterBottom="true">@panel.DisplayName</MudText>
+                                    <MudButton Href="@GetSelectionPath(panel)" Variant="Variant.Filled" Color="Color.Default" Class="button-primary" FullWidth="true">
+                                        Continue
+                                    </MudButton>
+                                </MudPaper>
+                            </MudItem>
+                        }
+                    </MudGrid>
+
+                    @if (AvailablePanels.Count == 0)
+                    {
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" Class="mt-4">
+                            No panels are currently available for your account.
+                        </MudAlert>
+                    }
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}

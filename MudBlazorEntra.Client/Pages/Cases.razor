@@ -1,0 +1,134 @@
+@page "/cases"
+@page "/{PanelPath}/cases"
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject PortalDataService PortalDataService
+@inject WhiteLabelContext WhiteLabelContext
+
+<PageTitle>Cases</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="py-8 px-4 px-md-8">
+    <MudPaper Class="pa-6 cases-shell" Elevation="0">
+        <MudStack Row="true" Class="cases-header">
+            <div>
+                <MudText Typo="Typo.overline" Color="Color.Primary">Cases</MudText>
+                <MudText Typo="Typo.h3" GutterBottom="true">Case list</MudText>
+            </div>
+            <MudButton Href='@WhiteLabelContext.GetPath("new-enquiry")' Variant="Variant.Filled" Color="Color.Default" Class="button-primary">New Enquiry</MudButton>
+        </MudStack>
+
+        <MudStack Row="true" Spacing="2" Class="mt-6 flex-wrap">
+            <div class="ownership-toggle">
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Inherit"
+                           Class="@GetOwnershipButtonClass(OwnershipFilter.MyCases)"
+                           OnClick="@(() => SetOwnershipFilter(OwnershipFilter.MyCases))">
+                    My cases
+                </MudButton>
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Inherit"
+                           Class="@GetOwnershipButtonClass(OwnershipFilter.CompanyCases)"
+                           OnClick="@(() => SetOwnershipFilter(OwnershipFilter.CompanyCases))">
+                    All company cases
+                </MudButton>
+            </div>
+
+            <MudMenu @ref="_dateFilterMenu" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                <ActivatorContent>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="button-tertiary" StartIcon="@Icons.Material.Filled.DateRange">
+                        @DateFilterSummary
+                    </MudButton>
+                </ActivatorContent>
+                <ChildContent>
+                    <MudPaper Class="pa-4" Style="width: 360px;">
+                        <MudStack Spacing="2">
+                            <MudText Typo="Typo.subtitle1">Date filter</MudText>
+                            <MudRadioGroup T="string" @bind-Value="_dateMode">
+                                <MudRadio T="string" Value="@AbsoluteMode">Absolute dates</MudRadio>
+                                <MudRadio T="string" Value="@RelativeMode">Relative dates</MudRadio>
+                            </MudRadioGroup>
+
+                            <MudRadioGroup T="string" @bind-Value="_dateBasis">
+                                <MudRadio T="string" Value="@LastUpdatedBasis">Last updated date</MudRadio>
+                                <MudRadio T="string" Value="@CreatedBasis">Created date</MudRadio>
+                            </MudRadioGroup>
+
+                            @if (_dateMode == AbsoluteMode)
+                            {
+                                <MudDatePicker Label="From" PickerVariant="PickerVariant.Inline" @bind-Date="_absoluteFrom" />
+                                <MudDatePicker Label="To" PickerVariant="PickerVariant.Inline" @bind-Date="_absoluteTo" />
+                            }
+                            else
+                            {
+                                <MudSelect T="string" Label="Relative period" @bind-Value="_relativeRange">
+                                    <MudSelectItem T="string" Value='@("3w")'>Last 3 weeks</MudSelectItem>
+                                    <MudSelectItem T="string" Value='@("3m")'>Last 3 months</MudSelectItem>
+                                    <MudSelectItem T="string" Value='@("6m")'>Last 6 months</MudSelectItem>
+                                    <MudSelectItem T="string" Value='@("1y")'>Last 12 months</MudSelectItem>
+                                    <MudSelectItem T="string" Value='@("all")'>All time</MudSelectItem>
+                                </MudSelect>
+                            }
+
+                            <MudStack Row="true" Justify="Justify.FlexEnd" Spacing="1">
+                                <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="button-tertiary" OnClick="@ResetDateFilter">Reset</MudButton>
+                                <MudButton Variant="Variant.Filled" Color="Color.Default" Class="button-secondary" OnClick="@ApplyDateFilterAsync">Apply</MudButton>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+                </ChildContent>
+            </MudMenu>
+        </MudStack>
+
+        <MudTabs Rounded="true" Class="mt-6" ActivePanelIndex="@_activeTabIndex" ActivePanelIndexChanged="@OnTabChanged">
+            <MudTabPanel Text="All" />
+            <MudTabPanel Text="Draft" />
+            <MudTabPanel Text="Issued" />
+            <MudTabPanel Text="Cancelled" />
+        </MudTabs>
+
+        <MudStack Row="true" Class="mt-4 mb-4">
+            <MudTextField T="string"
+                          @bind-Value="_searchTerm"
+                          Placeholder="Search reference, case ID, or address"
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Immediate="true"
+                          Class="search-box" />
+        </MudStack>
+
+        <MudTable T="CaseListItem"
+                  Items="@FilteredCases"
+                  Hover="true"
+                  Dense="true"
+                  Bordered="false"
+                  Elevation="0"
+                  Breakpoint="Breakpoint.Sm"
+                  OnRowClick="@OnRowClick">
+            <HeaderContent>
+                <MudTh>Your reference</MudTh>
+                <MudTh>Case ID</MudTh>
+                <MudTh>Address</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Last updated date</MudTh>
+                <MudTh>Created date</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Your reference">@context.YourReference</MudTd>
+                <MudTd DataLabel="Case ID">@context.CaseId</MudTd>
+                <MudTd DataLabel="Address">@context.Address</MudTd>
+                <MudTd DataLabel="Status">
+                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small" Class="@GetStatusChipClass(context.Status)">@context.Status</MudChip>
+                </MudTd>
+                <MudTd DataLabel="Last updated date">@context.LastUpdatedDate.ToString("dd MMM yyyy")</MudTd>
+                <MudTd DataLabel="Created date">@context.CreatedDate.ToString("dd MMM yyyy")</MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText Typo="Typo.body1" Class="pa-4">No cases match the current filters.</MudText>
+            </NoRecordsContent>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[] { 5, 10, 20, 50 }" RowsPerPageString="Rows per page" InfoFormat="{first_item}-{last_item} of {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+</MudContainer>

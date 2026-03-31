@@ -1,0 +1,11 @@
+@page "/signin"
+@page "/{PanelPath}/signin"
+
+<PageTitle>Sign In</PageTitle>
+
+<SignInRegisterPanel />
+
+@code {
+    [Parameter]
+    public string? PanelPath { get; set; }
+}

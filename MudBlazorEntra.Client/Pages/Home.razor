@@ -1,0 +1,28 @@
+@page "/landing"
+@page "/{PanelPath}/landing"
+@using MudBlazorEntra.Client.Components
+@inject NavigationManager NavigationManager
+@inject PortalDataService PortalDataService
+@inject WhiteLabelContext WhiteLabelContext
+
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+    <Authorized Context="authState">
+        @if (_isLoadingPanels)
+        {
+            <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10 d-flex justify-center">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+            </MudContainer>
+        }
+        else
+        {
+            <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10 d-flex justify-center">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+            </MudContainer>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <SignInRegisterPanel />
+    </NotAuthorized>
+</AuthorizeView>

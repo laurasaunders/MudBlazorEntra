@@ -1,0 +1,67 @@
+@page "/cases/{CaseId}"
+@page "/{PanelPath}/cases/{CaseId}"
+@attribute [Authorize]
+@inject PortalDataService PortalDataService
+@inject WhiteLabelContext WhiteLabelContext
+
+<PageTitle>Case Details</PageTitle>
+
+@if (_isLoading)
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10 d-flex justify-center">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    </MudContainer>
+}
+else if (_case is null)
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="py-10">
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+            That case could not be found.
+        </MudAlert>
+    </MudContainer>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Large" Class="py-8 px-4 px-md-8">
+        <MudPaper Class="pa-8 case-details-shell" Elevation="0">
+        <MudBreadcrumbs Items="@Breadcrumbs" Class="mb-4" />
+
+            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
+                <div>
+                    <MudText Typo="Typo.h3">@_case.PolicyId</MudText>
+                    <MudText Typo="Typo.body1">@_case.Address</MudText>
+                </div>
+                <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Class="@GetStatusChipClass(_case.Status)">@_case.Status</MudChip>
+            </MudStack>
+
+            <MudGrid Spacing="3">
+                <MudItem xs="12" md="6">
+                    <MudPaper Class="pa-5 case-detail-card" Elevation="0">
+                        <MudText Typo="Typo.subtitle2">Your reference</MudText>
+                        <MudText Typo="Typo.body1">@_case.YourReference</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudPaper Class="pa-5 case-detail-card" Elevation="0">
+                        <MudText Typo="Typo.subtitle2">Ownership</MudText>
+                        <MudText Typo="Typo.body1">@(_case.IsMine ? "My case" : "Company case")</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudPaper Class="pa-5 case-detail-card" Elevation="0">
+                        <MudText Typo="Typo.subtitle2">Created date</MudText>
+                        <MudText Typo="Typo.body1">@_case.CreatedDate.ToString("dd MMM yyyy")</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudPaper Class="pa-5 case-detail-card" Elevation="0">
+                        <MudText Typo="Typo.subtitle2">Last updated date</MudText>
+                        <MudText Typo="Typo.body1">@_case.LastUpdatedDate.ToString("dd MMM yyyy")</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton Href='@WhiteLabelContext.GetPath("cases")' Variant="Variant.Outlined" Color="Color.Primary" Class="mt-6">Back to cases</MudButton>
+        </MudPaper>
+    </MudContainer>
+}

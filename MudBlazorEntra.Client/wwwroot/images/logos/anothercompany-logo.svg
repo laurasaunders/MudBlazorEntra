@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Another Company logo">
+  <rect width="120" height="120" rx="28" fill="#0f4c3a"/>
+  <circle cx="60" cy="60" r="34" fill="#2e8f71"/>
+  <path d="M60 36 78 84H66l-3-10H47l-3 10H32l18-48h10Zm0 16-8 14h16l-8-14Z" fill="#fff"/>
+</svg>

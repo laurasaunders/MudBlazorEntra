@@ -1,0 +1,66 @@
+@page "/new-enquiry"
+@page "/{PanelPath}/new-enquiry"
+@attribute [Authorize]
+
+<PageTitle>New Enquiry</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8 px-4 px-md-8">
+    <MudPaper Class="pa-8 enquiry-shell" Elevation="0">
+        <MudBreadcrumbs Items="@_breadcrumbs" Class="mb-4" />
+        <MudText Typo="Typo.h3" GutterBottom="true">New enquiry</MudText>
+        <MudText Typo="Typo.body1" Class="mb-6">
+            This starts the stepped enquiry workflow. The detail forms for each stage can be added next.
+        </MudText>
+
+        <MudStepper @key="_activeStep" ActiveIndex="@_activeStep" Class="enquiry-stepper">
+            <ChildContent>
+                <MudStep Title="Product selection">
+                    <MudPaper Class="pa-6 step-panel" Elevation="0">
+                        <MudText Typo="Typo.h5" GutterBottom="true">Step 1. Product selection</MudText>
+                        <MudText Typo="Typo.body1">
+                            Select the product type and prepare the enquiry context for the next stage.
+                        </MudText>
+                    </MudPaper>
+                </MudStep>
+
+                <MudStep Title="Risk selection">
+                    <MudPaper Class="pa-6 step-panel" Elevation="0">
+                        <MudText Typo="Typo.h5" GutterBottom="true">Step 2. Risk selection</MudText>
+                        <MudText Typo="Typo.body1">
+                            Choose the relevant risk information and any supporting risk options.
+                        </MudText>
+                    </MudPaper>
+                </MudStep>
+
+                <MudStep Title="Policy details">
+                    <MudPaper Class="pa-6 step-panel" Elevation="0">
+                        <MudText Typo="Typo.h5" GutterBottom="true">Step 3. Policy details</MudText>
+                        <MudText Typo="Typo.body1">
+                            Capture the policy details and confirm the enquiry before submission.
+                        </MudText>
+                    </MudPaper>
+                </MudStep>
+            </ChildContent>
+        </MudStepper>
+
+        <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mt-6 flex-wrap enquiry-actions">
+            @if (_activeStep > 0)
+            {
+                <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="button-tertiary" Href="@GetStepUrl(_activeStep - 1)">
+                    Back
+                </MudButton>
+            }
+            else
+            {
+                <span></span>
+            }
+
+            @if (_activeStep < LastStepIndex)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Default" Class="button-primary" Href="@GetStepUrl(_activeStep + 1)">
+                    Continue
+                </MudButton>
+            }
+        </MudStack>
+    </MudPaper>
+</MudContainer>

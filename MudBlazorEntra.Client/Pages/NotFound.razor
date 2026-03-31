@@ -1,0 +1,10 @@
+@page "/not-found"
+@layout Layout.MainLayout
+@inject WhiteLabelContext WhiteLabelContext
+
+<PageTitle>Not Found</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">404 - Page Not Found</MudText>
+<MudText Class="mb-8">Sorry, the content you are looking for does not exist.</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Default" Class="button-primary" Href='@WhiteLabelContext.GetPath()'>Go to Home</MudButton>

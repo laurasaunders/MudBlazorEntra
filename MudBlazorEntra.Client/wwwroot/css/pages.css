@@ -1,0 +1,213 @@
+.dashboard-card {
+    border: 1px solid var(--panel-border-color);
+    background: var(--panel-surface-color);
+}
+
+.metric-card {
+    border: none;
+    color: #ffffff;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.metric-card-primary {
+    background: var(--metric-card-primary-start);
+}
+
+.metric-card-mid {
+    background: var(--metric-card-secondary-start);
+}
+
+.metric-card-bright {
+    background: var(--metric-card-tertiary-start);
+}
+
+.metric-card-soft {
+    background: var(--metric-card-quaternary-start);
+}
+
+.metric-title {
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.metric-value {
+    color: #ffffff;
+    font-size: 2.6rem;
+    line-height: 1;
+}
+
+.metric-link {
+    display: block;
+}
+
+.button-primary,
+.button-secondary,
+.button-tertiary {
+    text-transform: none;
+    font-weight: 700;
+    box-shadow: none !important;
+}
+
+.button-primary {
+    background: var(--panel-primary-button-color) !important;
+    color: var(--panel-primary-button-text-color) !important;
+}
+
+.button-primary:hover {
+    background: var(--panel-primary-button-color) !important;
+    filter: brightness(0.96);
+}
+
+.button-secondary {
+    background: var(--panel-secondary-button-color) !important;
+    color: var(--panel-secondary-button-text-color) !important;
+}
+
+.button-secondary:hover {
+    background: var(--panel-secondary-button-color) !important;
+    filter: brightness(1.05);
+}
+
+.button-tertiary {
+    background: transparent !important;
+    color: var(--panel-tertiary-button-text-color) !important;
+    border: 1px solid var(--panel-tertiary-button-color) !important;
+}
+
+.button-tertiary:hover {
+    background: rgba(0, 0, 0, 0.02) !important;
+}
+
+.status-chip {
+    background: transparent !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.status-chip .mud-chip-content {
+    font-weight: 700;
+}
+
+.status-chip-draft {
+    color: var(--panel-primary-button-color) !important;
+    border-color: var(--panel-primary-button-color) !important;
+}
+
+.status-chip-issued {
+    color: var(--panel-appbar-color) !important;
+    border-color: var(--panel-appbar-color) !important;
+}
+
+.status-chip-cancelled {
+    color: #2F2F2F !important;
+    border-color: #2F2F2F !important;
+}
+
+.auth-shell {
+    min-height: calc(100vh - 140px);
+    padding: 4rem 1.5rem;
+    background:
+        radial-gradient(circle at top left, var(--auth-glow-primary), transparent 32%),
+        radial-gradient(circle at bottom right, var(--auth-glow-secondary), transparent 30%),
+        linear-gradient(135deg, var(--panel-background-color) 0%, var(--panel-surface-accent-color) 52%, var(--panel-background-color) 100%);
+}
+
+.auth-copy {
+    padding: 2rem 1rem 2rem 0;
+}
+
+.auth-panel {
+    border-radius: 32px;
+    background: var(--panel-surface-color);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--panel-border-color);
+}
+
+.panel-choice-card {
+    border: 1px solid var(--panel-border-color);
+    background: var(--panel-surface-color);
+}
+
+.accent-kicker {
+    color: var(--panel-accent-text-color);
+    letter-spacing: 0.16rem;
+}
+
+.cases-shell {
+    border: 1px solid var(--panel-border-color);
+    background: var(--panel-surface-color);
+}
+
+.cases-header {
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-box {
+    min-width: min(100%, 440px);
+}
+
+.ownership-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem;
+    border: 1px solid var(--panel-border-color);
+    border-radius: 999px;
+    background: var(--panel-surface-accent-color);
+}
+
+.ownership-option {
+    color: var(--panel-text-secondary-color);
+    font-weight: 700;
+    text-transform: none;
+    border-radius: 999px;
+    padding-inline: 1rem;
+}
+
+.ownership-option.active {
+    background: var(--panel-appbar-color);
+    color: var(--panel-nav-text-color);
+}
+
+.enquiry-shell {
+    border: 1px solid var(--panel-border-color);
+    background: var(--panel-surface-color);
+}
+
+.enquiry-stepper {
+    background: transparent;
+}
+
+.enquiry-stepper .mud-stepper-actions {
+    display: none;
+}
+
+.step-panel {
+    border: 1px solid var(--panel-border-color);
+    background: linear-gradient(180deg, var(--panel-surface-color) 0%, var(--panel-surface-accent-color) 100%);
+}
+
+.case-details-shell,
+.case-detail-card {
+    border: 1px solid var(--panel-border-color);
+}
+
+@media (max-width: 960px) {
+    .auth-copy {
+        padding-right: 0;
+    }
+
+    .cases-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
