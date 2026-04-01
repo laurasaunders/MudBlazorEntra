@@ -258,21 +258,22 @@
     border-radius: 24px !important;
 }
 
+.risk-summary-input .mud-input > input,
+.risk-summary-input .mud-select-input {
+    background: #ffffff !important;
+}
+
 .risk-summary-input .mud-input-outlined-border {
     border-radius: 24px !important;
 }
 
 .risk-summary-input .mud-input-adornment {
-    background: transparent !important;
+    background: var(--panel-surface-color) !important;
     color: #8a8f98 !important;
 }
 
 .risk-summary-input .mud-input-adornment .mud-input-adornment-text {
     color: #8a8f98 !important;
-}
-
-.risk-summary-input .mud-input > input {
-    background: transparent !important;
 }
 
 .risk-summary-input .mud-select-input {
