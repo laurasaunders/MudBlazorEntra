@@ -7,41 +7,49 @@
 <MudContainer MaxWidth="MaxWidth.Large" Class="py-8 px-4 px-md-8">
     <MudPaper Class="pa-8 enquiry-shell" Elevation="0">
         <MudBreadcrumbs Items="@_breadcrumbs" Class="mb-4" />
-        <MudText Typo="Typo.h3" GutterBottom="true">New enquiry</MudText>
-        <MudText Typo="Typo.body1" Class="mb-6">
-            This starts the stepped enquiry workflow. The detail forms for each stage can be added next.
-        </MudText>
 
-        <MudStepper @key="_activeStep" ActiveIndex="@_activeStep" Class="enquiry-stepper">
-            <ChildContent>
-                <MudStep Title="Product selection">
-                    <MudPaper Class="pa-6 step-panel" Elevation="0">
-                        <MudText Typo="Typo.h5" GutterBottom="true">Step 1. Product selection</MudText>
-                        <MudText Typo="Typo.body1">
-                            Select the product type and prepare the enquiry context for the next stage.
-                        </MudText>
-                    </MudPaper>
-                </MudStep>
+        <div class="enquiry-steps mb-8">
+            @for (var stepIndex = 0; stepIndex <= LastStepIndex; stepIndex++)
+            {
+                <div class="enquiry-step-item @(stepIndex == _activeStep ? "active" : stepIndex < _activeStep ? "complete" : string.Empty)">
+                    <span class="enquiry-step-circle">@(stepIndex + 1)</span>
+                    <span class="enquiry-step-label">@GetStepLabel(stepIndex)</span>
+                </div>
 
-                <MudStep Title="Risk selection">
-                    <MudPaper Class="pa-6 step-panel" Elevation="0">
-                        <MudText Typo="Typo.h5" GutterBottom="true">Step 2. Risk selection</MudText>
-                        <MudText Typo="Typo.body1">
-                            Choose the relevant risk information and any supporting risk options.
-                        </MudText>
-                    </MudPaper>
-                </MudStep>
+                @if (stepIndex < LastStepIndex)
+                {
+                    <span class="enquiry-step-connector"></span>
+                }
+            }
+        </div>
 
-                <MudStep Title="Policy details">
-                    <MudPaper Class="pa-6 step-panel" Elevation="0">
-                        <MudText Typo="Typo.h5" GutterBottom="true">Step 3. Policy details</MudText>
-                        <MudText Typo="Typo.body1">
-                            Capture the policy details and confirm the enquiry before submission.
-                        </MudText>
-                    </MudPaper>
-                </MudStep>
-            </ChildContent>
-        </MudStepper>
+        @if (_activeStep == 0)
+        {
+            <MudPaper Class="pa-6 step-panel" Elevation="0">
+                <MudText Typo="Typo.h5" GutterBottom="true">Step 1. Product selection</MudText>
+                <MudText Typo="Typo.body1">
+                    Select the product type and prepare the enquiry context for the next stage.
+                </MudText>
+            </MudPaper>
+        }
+        else if (_activeStep == 1)
+        {
+            <NewEnquiryRiskSelectionStep SearchText="@_riskSearchText"
+                                         SearchTextChanged="@OnRiskSearchTextChanged"
+                                         Risks="@FilteredRisks"
+                                         SelectedRiskCount="@SelectedRiskCount"
+                                         ContinueUrl="@GetStepUrl(_activeStep + 1)"
+                                         OnRiskSelectedChanged="@OnRiskSelectedChanged" />
+        }
+        else
+        {
+            <MudPaper Class="pa-6 step-panel" Elevation="0">
+                <MudText Typo="Typo.h5" GutterBottom="true">Step 3. Policy details</MudText>
+                <MudText Typo="Typo.body1">
+                    Capture the policy details and confirm the enquiry before submission.
+                </MudText>
+            </MudPaper>
+        }
 
         <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mt-6 flex-wrap enquiry-actions">
             @if (_activeStep > 0)
@@ -57,7 +65,11 @@
 
             @if (_activeStep < LastStepIndex)
             {
-                <MudButton Variant="Variant.Filled" Color="Color.Default" Class="button-primary" Href="@GetStepUrl(_activeStep + 1)">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Default"
+                           Class="button-primary"
+                           Href="@GetStepUrl(_activeStep + 1)"
+                           Style="@(_activeStep == 1 ? "display:none;" : null)">
                     Continue
                 </MudButton>
             }

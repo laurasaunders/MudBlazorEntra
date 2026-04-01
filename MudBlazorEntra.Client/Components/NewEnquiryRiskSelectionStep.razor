@@ -1,0 +1,102 @@
+@using MudBlazorEntra.Client.Models.NewEnquiry
+
+<MudGrid Spacing="3" Class="risk-step-layout">
+    <MudItem xs="12" md="8">
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="risk-step-title mb-6">Select risk coverage.</MudText>
+
+        <MudTextField T="string"
+                      Value="@SearchText"
+                      ValueChanged="@SearchTextChanged"
+                      Placeholder="Search for a risk by name."
+                      Variant="Variant.Outlined"
+                      Immediate="true"
+                      Class="risk-search mb-5" />
+
+        <MudText Typo="Typo.subtitle1" Class="mb-3 risk-group-title">Continued Use</MudText>
+
+        <MudExpansionPanels MultiExpansion="true" Class="risk-expansion-list">
+            @foreach (var risk in Risks)
+            {
+                <MudExpansionPanel Class="@(risk.IsDisabled ? "risk-expansion-item risk-expansion-item-disabled" : "risk-expansion-item")"
+                                   Disabled="@risk.IsDisabled">
+                    <TitleContent>
+                        <div class="risk-expansion-title">
+                            <MudCheckBox T="bool"
+                                         Value="@risk.IsSelected"
+                                         ValueChanged="@(selected => OnRiskSelectedChanged.InvokeAsync((risk.Id, selected)))"
+                                         Color="Color.Primary"
+                                         Disabled="@risk.IsDisabled"
+                                         Dense="true" />
+                            <span class="risk-name">@risk.Name</span>
+                            @if (!string.IsNullOrWhiteSpace(risk.Tag))
+                            {
+                                <span class="risk-tag">@risk.Tag</span>
+                            }
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudText Typo="Typo.body2" Class="risk-description">
+                            @risk.Description
+                        </MudText>
+                    </ChildContent>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudPaper Class="risk-summary-panel pa-5" Elevation="0">
+            <MudText Typo="Typo.h6" Class="mb-2">Product</MudText>
+            <MudText Typo="Typo.body2" Class="mb-5">Commercial Known Risk</MudText>
+
+            <MudText Typo="Typo.h6" Class="mb-2">Region</MudText>
+            <MudText Typo="Typo.body2" Class="mb-5">England and Wales</MudText>
+
+            <MudText Typo="Typo.h6" Class="mb-2">Level of Indemnity</MudText>
+            <MudTextField T="string"
+                          @bind-Value="LevelOfIndemnity"
+                          Variant="Variant.Outlined"
+                          InputType="InputType.Number"
+                          Adornment="Adornment.Start"
+                          AdornmentText="£"
+                          Class="mb-5 risk-summary-input" />
+
+            <MudText Typo="Typo.h6" Class="mb-2">Policy in Favour of</MudText>
+            <MudSelect T="string"
+                       @bind-Value="PolicyInFavourOf"
+                       Variant="Variant.Outlined"
+                       Dense="true"
+                       Class="mb-5 risk-summary-input">
+                <MudSelectItem T="string" Value="@("Lender")">Lender</MudSelectItem>
+                <MudSelectItem T="string" Value="@("Owner")">Owner</MudSelectItem>
+            </MudSelect>
+
+            <MudText Typo="Typo.h6" Class="mb-2">Risk Coverage</MudText>
+            <MudText Typo="Typo.body2" Class="mb-5">@SelectedRiskCount risks selected</MudText>
+
+            <MudText Typo="Typo.h6" Class="mb-2">Inflation Cover</MudText>
+            <MudCheckBox T="bool" Value="@true" ReadOnly="true" Label="Required" Color="Color.Primary" Class="mb-5" />
+
+            <MudText Typo="Typo.h6" Class="mb-2">Premium</MudText>
+            <div class="premium-summary mb-5">
+                <div><span>Premium</span><span>-</span></div>
+                <div><span>IPT</span><span>-</span></div>
+                <div><span>Total</span><span>-</span></div>
+            </div>
+            <MudText Typo="Typo.caption" Class="premium-empty-note mb-5">Premium will appear after calculation.</MudText>
+
+            <MudStack Spacing="2">
+                <MudButton Variant="Variant.Filled" Color="Color.Default" Class="button-secondary" FullWidth="true">
+                    Calculate Premium
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Default"
+                           Class="button-primary"
+                           FullWidth="true"
+                           Href="@ContinueUrl">
+                    Continue
+                </MudButton>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
