@@ -296,9 +296,36 @@
 .risk-expansion-list {
     max-height: 620px;
     overflow-y: scroll;
-    padding-right: 0.35rem;
+    padding: 0.75rem 0.35rem 0.75rem 0.75rem;
     scrollbar-color: #141D3A #DCEFF9;
     scrollbar-width: auto;
+}
+
+.risk-expansion-frame {
+    position: relative;
+    border: 2px solid #DCEFF9;
+    border-radius: 18px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.risk-expansion-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.risk-expansion-fade-top {
+    top: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.risk-expansion-fade-bottom {
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 .risk-expansion-list::-webkit-scrollbar {

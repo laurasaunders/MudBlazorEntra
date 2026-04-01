@@ -13,36 +13,40 @@
                       Immediate="true"
                       Class="risk-search mb-5" />
 
-        <MudText Typo="Typo.subtitle1" Class="mb-3 risk-group-title">Continued Use</MudText>
+        <MudText Typo="Typo.subtitle1" Class="mb-3 risk-group-title">Continued Use (@Risks.Count risks)</MudText>
 
-        <MudExpansionPanels MultiExpansion="true" Class="risk-expansion-list">
-            @foreach (var risk in Risks)
-            {
-                <MudExpansionPanel Class="@(risk.IsDisabled ? "risk-expansion-item risk-expansion-item-disabled" : "risk-expansion-item")"
-                                   Disabled="@risk.IsDisabled">
-                    <TitleContent>
-                        <div class="risk-expansion-title">
-                            <MudCheckBox T="bool"
-                                         Value="@risk.IsSelected"
-                                         ValueChanged="@(selected => OnRiskSelectionChangedAsync(risk.Id, selected))"
-                                         Color="Color.Primary"
-                                         Disabled="@risk.IsDisabled"
-                                         Dense="true" />
-                            <span class="risk-name">@risk.Name</span>
-                            @if (!string.IsNullOrWhiteSpace(risk.Tag))
-                            {
-                                <span class="risk-tag">@risk.Tag</span>
-                            }
-                        </div>
-                    </TitleContent>
-                    <ChildContent>
-                        <MudText Typo="Typo.body2" Class="risk-description">
-                            @risk.Description
-                        </MudText>
-                    </ChildContent>
-                </MudExpansionPanel>
-            }
-        </MudExpansionPanels>
+        <div class="risk-expansion-frame">
+            <div class="risk-expansion-fade risk-expansion-fade-top"></div>
+            <MudExpansionPanels MultiExpansion="true" Class="risk-expansion-list">
+                @foreach (var risk in Risks)
+                {
+                    <MudExpansionPanel Class="@(risk.IsDisabled ? "risk-expansion-item risk-expansion-item-disabled" : "risk-expansion-item")"
+                                       Disabled="@risk.IsDisabled">
+                        <TitleContent>
+                            <div class="risk-expansion-title">
+                                <MudCheckBox T="bool"
+                                             Value="@risk.IsSelected"
+                                             ValueChanged="@(selected => OnRiskSelectionChangedAsync(risk.Id, selected))"
+                                             Color="Color.Primary"
+                                             Disabled="@risk.IsDisabled"
+                                             Dense="true" />
+                                <span class="risk-name">@risk.Name</span>
+                                @if (!string.IsNullOrWhiteSpace(risk.Tag))
+                                {
+                                    <span class="risk-tag">@risk.Tag</span>
+                                }
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudText Typo="Typo.body2" Class="risk-description">
+                                @risk.Description
+                            </MudText>
+                        </ChildContent>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
+            <div class="risk-expansion-fade risk-expansion-fade-bottom"></div>
+        </div>
     </MudItem>
 
     <MudItem xs="12" md="4">
